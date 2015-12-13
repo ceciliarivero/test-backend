@@ -1,14 +1,19 @@
+require_relative '../../forms/task'
+
+if RUBY_ENGINE == 'opal'
+  class Element
+    alias_native :mask
+  end
+end
+
 class TestApp
   module Components
     class Todo < Wedge::Component
       name :todo
 
-      on :click, '.taskAdd, .taskDelete' do |el, evt|
-        evt.prevent_default
+      on :submit, '#add-task-form', form: :add_task_form, key: :task do |form, el|
 
-        button_class_name = el.attr 'class'
-
-        `alert('Clicked ' + button_class_name)`
+        ap form.attributes
       end
     end
   end

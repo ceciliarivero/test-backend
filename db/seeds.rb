@@ -14,14 +14,14 @@ jane = User.create({
 
 Task.create({
   user_id: john.id,
-  description: "Going to the gym",
+  description: "Go to the gym",
   category: "personal",
   date: "30/12/2015"
 })
 
 Task.create({
   user_id: john.id,
-  description: "Finish essay",
+  description: "Write essay",
   category: "school",
   date: "20/12/2015"
 })

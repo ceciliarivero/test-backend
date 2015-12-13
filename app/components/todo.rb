@@ -37,28 +37,35 @@ class TestApp
         tmpl :task_item, dom.find('.taskItem')
       end
 
-      def add_task description = '', category = '', date = Date.today, complete = false
-        raise "#{category} is not in the list of CATEGORIES" unless CATEGORIES.include? category
+      def display_tasks
+        user_id = session["User"]
 
-        task_list_dom = dom.find('ul.taskList')
-        task_item     = tmpl :task_item
+        SEQUEL_DB[:tasks].where(user_id: user_id).all.each do |task|
+          task_list_dom = dom.find('ul.taskList')
+          task_item     = tmpl :task_item
 
-        # Description
-        description_dom = task_item.find('.description')
-        description_dom.html description
-        description_dom.add_class "complete-#{complete}"
+          description = task[:description]
+          category = task[:category]
+          date = task[:date]
+          complete = task[:complete]
 
-        # Category
-        category_dom = task_item.find('.category')
-        category_dom.html category
-        category_dom.add_class "category-#{category}"
+          # Description
+          description_dom = task_item.find('.description')
+          description_dom.html description
+          description_dom.add_class "complete-#{complete}"
 
-        # Date
-        date_dom = task_item.find('.date')
-        date_dom.html date.strftime('%m/%d/%Y')
-        date_dom.add_class "complete-#{complete}"
+          # Category
+          category_dom = task_item.find('.category')
+          category_dom.html category
+          category_dom.add_class "category-#{category}"
 
-        task_list_dom.append task_item
+          # Date
+          date_dom = task_item.find('.date')
+          date_dom.html task[:date].strftime('%m/%d/%Y')
+          date_dom.add_class "complete-#{complete}"
+
+          task_list_dom.append task_item
+        end
       end
     end
   end
