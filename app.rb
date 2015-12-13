@@ -4,6 +4,10 @@ require 'wedge'
 require 'shield'
 
 class TestApp < Roda
+  include Shield::Helpers
+
+  use Rack::Session::Cookie, secret: "my_secret", key: "_test_session"
+
   plugin :environments
   plugin :multi_route
   plugin :empty_root
@@ -37,9 +41,20 @@ class TestApp < Roda
     BetterErrors::Middleware.allow_ip! "0.0.0.0/0"
   end
 
+  def current_user
+    authenticated(User)
+  end
+
   route do |r|
     # Load the todo app
-    r.root { wedge(:todo).to_js :display }
+
+    r.root do
+      if current_user
+        wedge(:todo).to_js :display
+      else
+        wedge(:login).to_js :display
+      end
+    end
 
     # Handles wedge calls
     r.wedge_assets

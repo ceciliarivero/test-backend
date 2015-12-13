@@ -2,11 +2,16 @@ class TestApp
   module Components
     module LoginServer
       def login_user user
-        ap user
+        username = user["username"]
+        pass = user["password"]
 
-        { success: false, errors: {
-          username: ['Already Taken'] }
-        }
+        if login(User, username, pass)
+          { success: true }
+        else
+          { success: false, errors: {
+            username: ['Invalid username/password combination'] }
+          }
+        end
       end
     end
   end

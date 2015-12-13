@@ -16,7 +16,7 @@ namespace :db do
 
   desc "Perform migration up to latest migration available"
   task :seed do
-    require './db/seeds'
+    require './db/seeds.rb'
   end
 
   desc "Perform rollback to specified target or full rollback as default"
